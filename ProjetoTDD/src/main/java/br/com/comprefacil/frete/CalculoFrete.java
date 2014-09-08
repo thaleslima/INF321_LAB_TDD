@@ -11,6 +11,7 @@ import org.tempuri.CalcPrecoPrazoWSLocator;
 import org.tempuri.CalcPrecoPrazoWSSoap;
 
 public class CalculoFrete {
+	
 	public Frete calcularFrete(String peso, BigDecimal largura, BigDecimal comprimento, BigDecimal altura, String tipo, String cep)
 	{
 		Frete frete = new Frete();
@@ -22,7 +23,7 @@ public class CalculoFrete {
 		String prazo = "";
 		String erroCod = "";
 		String erroMsg = "";
-		//CEPdeOrigem sempre será o CEP do IC 13081-970
+		//CEPdeOrigem sempre serï¿½ o CEP do IC 13081-970
 		
 		//tipo tem que ser uma String, para o UC-01 precisamos dos seguintes
 		//	40010 - Sedex
@@ -46,7 +47,7 @@ public class CalculoFrete {
 				erroCod = servico.getErro();
 				erroMsg = servico.getMsgErro();
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
+				// TODO Auto-generated catch blockxxxx
 				e.printStackTrace();
 			}
 		} catch (ServiceException e1) {
@@ -56,38 +57,38 @@ public class CalculoFrete {
 		
 		/*if(peso <= 0)
 		{
-			frete.setStatus("peso inválido");
+			frete.setStatus("peso invï¿½lido");
 			return frete;
 		}
 		
 		if(largura <= 0)
 		{
-			frete.setStatus("largura inválida");
+			frete.setStatus("largura invï¿½lida");
 			return frete;
 		}
 		
 		if(comprimento <= 0)
 		{
-			frete.setStatus("comprimento inválida");
+			frete.setStatus("comprimento invï¿½lida");
 			return frete;
 		}
 		
 		if(altura <= 0)
 		{
-			frete.setStatus("comprimento inválida");
+			frete.setStatus("comprimento invï¿½lida");
 			return frete;
 		}
 		
 		
 		if(tipo < 1 && tipo > 3)
 		{
-			frete.setStatus("tipo inválida");
+			frete.setStatus("tipo invï¿½lida");
 			return frete;
 		}
 		
 		if(frete.equals(""))
 		{
-			frete.setStatus("frete inválido");
+			frete.setStatus("frete invï¿½lido");
 			return frete;
 		}*/
 		
