@@ -3,7 +3,7 @@ package br.com.comprefacil.frete;
 public class Frete {
 	private double valor;
 	private double tempoEntrega;
-	private String erroCod;
+	private Integer erroCod;
 	private String erroMsg;
 	
 	public double getValor() {
@@ -18,10 +18,10 @@ public class Frete {
 	public void setTempoEntrega(double tempoEntrega) {
 		this.tempoEntrega = tempoEntrega;
 	}
-	public String getErroCod() {
+	public Integer getErroCod() {
 		return erroCod;
 	}
-	public void setErroCod(String erroCod) {
+	public void setErroCod(Integer erroCod) {
 		this.erroCod = erroCod;
 	}
 	public String getErroMsg() {

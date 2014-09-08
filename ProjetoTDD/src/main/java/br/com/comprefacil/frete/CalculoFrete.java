@@ -98,7 +98,7 @@ public class CalculoFrete {
 		
 		frete.setValor(Double.parseDouble(valor));
 		frete.setTempoEntrega(Double.parseDouble(prazo));
-		frete.setErroCod(erroCod);
+		frete.setErroCod(Integer.parseInt(erroCod));
 		frete.setErroMsg(erroMsg);
 		
 		return frete;
