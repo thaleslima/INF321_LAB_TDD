@@ -150,4 +150,52 @@ public class UC01Teste {
 		Assert.assertTrue(frete.getValor() == 0);
 		Assert.assertTrue(frete.getTempoEntrega() == 0);
 	}
+	
+	@Test
+	public void alturaMaxIncorreto_testeInvalido() {
+		//Este teste já contempla as dimensões como testes válidos
+		CalculoFrete calculoFrete = new CalculoFrete();
+		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("11"), new BigDecimal("16"),
+				new BigDecimal("106"), "40010", "14400180");
+		
+		Assert.assertTrue(frete.getValor() == 0);
+		Assert.assertTrue(frete.getTempoEntrega() == 0);
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.ALTURA_MAX_EXCEDIDA.getValue()));
+	}
+	
+	@Test
+	public void alturaMinIncorreto_testeInvalido() {
+		//Este teste já contempla as dimensões como testes válidos
+		CalculoFrete calculoFrete = new CalculoFrete();
+		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("11"), new BigDecimal("16"),
+				new BigDecimal("1"), "40010", "14400180");
+		
+		Assert.assertTrue(frete.getValor() == 0);
+		Assert.assertTrue(frete.getTempoEntrega() == 0);
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.ALTURA_MIN_EXCEDIDA.getValue()));
+	}
+	
+	@Test
+	public void somaDimensoesMaxIncorreto_testeInvalido() {
+		//Este teste já contempla as dimensões como testes válidos
+		CalculoFrete calculoFrete = new CalculoFrete();
+		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("105"), new BigDecimal("105"),
+				new BigDecimal("2"), "40010", "14400180");
+		
+		Assert.assertTrue(frete.getValor() == 0);
+		Assert.assertTrue(frete.getTempoEntrega() == 0);
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.SOMA_DIMENSOES_EXCEDIDA.getValue()));
+	}
+	
+	@Test
+	public void somaDimensoesLimite_testeValido() {
+		//Este teste já contempla as dimensões como testes válidos
+		CalculoFrete calculoFrete = new CalculoFrete();
+		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("90"), new BigDecimal("90"),
+				new BigDecimal("20"), "40010", "14400180");
+		
+		Assert.assertTrue(frete.getValor() > 0);
+		Assert.assertTrue(frete.getTempoEntrega() > 0);
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.SOMA_CORRETA.getValue()));
+	}
 }
