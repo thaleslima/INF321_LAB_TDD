@@ -22,39 +22,9 @@ public class UC01Teste {
 		Assert.assertTrue(frete.getTempoEntrega() > 0);
 		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.PESO_CORRETO.getValue()));
 	}
-	
-	/*@Test
-	public void calculoSedex_peso_testeValido(){
-		CalculoFrete calculoFrete = new CalculoFrete();
-		Frete frete = calculoFrete.calcularFrete("30", new BigDecimal("11"), new BigDecimal("16"),
-				new BigDecimal("11"), "40010", "14400180");
-		
-		Integer valorDoErroCod = Integer.parseInt(frete.getErroCod());
-		Assert.assertTrue(valorDoErroCod.equals(CodigoRetornoFrete.PESO_CORRETO.getValue()));
-	}
-	
-	@Test
-	public void calculoSedex10_pesoExcedido_testeValido(){
-		CalculoFrete calculoFrete = new CalculoFrete();
-		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("11"), new BigDecimal("16"),
-				new BigDecimal("11"), "40215", "14400180");
-		
-		Integer valorDoErroCod = Integer.parseInt(frete.getErroCod());
-		Assert.assertTrue(valorDoErroCod.equals(CodigoRetornoFrete.PESO_CORRETO.getValue()));
-	}
-	
-	@Test
-	public void calculoSedexPAC_pesoExcedido_testeValido(){
-		CalculoFrete calculoFrete = new CalculoFrete();
-		Frete frete = calculoFrete.calcularFrete("28", new BigDecimal("11"), new BigDecimal("16"),
-				new BigDecimal("11"), "41106", "14400180");
-		
-		Integer valorDoErroCod = Integer.parseInt(frete.getErroCod());
-		Assert.assertTrue(valorDoErroCod.equals(CodigoRetornoFrete.PESO_CORRETO.getValue()));
-	}*/
 
 	@Test
-	public void calculoSedex_pesoNegativo_testeInvalido() {
+	public void Sedex_pesoNegativo_testeInvalido() {
 		CalculoFrete calculoFrete = new CalculoFrete();
 		Frete frete = calculoFrete.calcularFrete("-1", new BigDecimal("10"), new BigDecimal("10"),
 				new BigDecimal("10"), "40010", "14400180");
@@ -65,7 +35,7 @@ public class UC01Teste {
 	}
 	
 	@Test
-	public void calculoSedex_pesoExcedido_testeInvalido(){
+	public void Sedex_pesoExcedido_testeInvalido(){
 		CalculoFrete calculoFrete = new CalculoFrete();
 		Frete frete = calculoFrete.calcularFrete("31", new BigDecimal("11"), new BigDecimal("16"),
 				new BigDecimal("11"), "40010", "14400180");
@@ -76,7 +46,7 @@ public class UC01Teste {
 	}
 	
 	@Test
-	public void calculoSedex10_pesoExcedido_testeInvalido(){
+	public void Sedex10_pesoExcedido_testeInvalido(){
 		CalculoFrete calculoFrete = new CalculoFrete();
 		Frete frete = calculoFrete.calcularFrete("16", new BigDecimal("11"), new BigDecimal("16"),
 				new BigDecimal("11"), "40215", "14400180");
@@ -87,7 +57,7 @@ public class UC01Teste {
 	}
 	
 	@Test
-	public void calculoSedexPAC_pesoExcedido_testeInvalido(){
+	public void SedexPAC_pesoExcedido_testeInvalido(){
 		CalculoFrete calculoFrete = new CalculoFrete();
 		Frete frete = calculoFrete.calcularFrete("50", new BigDecimal("11"), new BigDecimal("16"),
 				new BigDecimal("11"), "41106", "14400180");
@@ -98,7 +68,7 @@ public class UC01Teste {
 	}
 	
 	@Test
-	public void calculo_comprimentoMinIncorreto_testeInvalido(){
+	public void comprimentoMinIncorreto_testeInvalido(){
 		CalculoFrete calculoFrete = new CalculoFrete();
 		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("11"), new BigDecimal("9"),
 				new BigDecimal("11"), "40010", "14400180");
@@ -109,12 +79,74 @@ public class UC01Teste {
 	}
 	
 	@Test
-	public void calculo_comprimentoMaxIncorreto_testeInvalido(){
+	public void comprimentoMaxIncorreto_testeInvalido(){
 		CalculoFrete calculoFrete = new CalculoFrete();
 		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("11"), new BigDecimal("106"),
 				new BigDecimal("11"), "40010", "14400180");
 		
 		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.COMPRIMENTO_MAX_EXCEDIDO.getValue()));
+		Assert.assertTrue(frete.getValor() == 0);
+		Assert.assertTrue(frete.getTempoEntrega() == 0);
+	}
+	
+	@Test
+	public void tipoInvalido_testeInvalido(){
+		CalculoFrete calculoFrete = new CalculoFrete();
+		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("20"), new BigDecimal("20"), 
+				new BigDecimal("20"), "11111", "14400180");
+		
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.TIPOINVALIDO.getValue()));
+		Assert.assertTrue(frete.getValor() == 0);
+		Assert.assertTrue(frete.getTempoEntrega()==0);
+	}
+	
+	@Test
+	public void CEPInvalido_testeInvalido(){
+		CalculoFrete calculoFrete = new CalculoFrete();
+		
+		//envio de menos de 8 caracteres
+		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("11"), new BigDecimal("16"),
+				new BigDecimal("11"), "40010", "123456");
+		
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.CEPDESTINVALIDO.getValue()));
+		Assert.assertTrue(frete.getValor() == 0);
+		Assert.assertTrue(frete.getTempoEntrega()==0);
+		
+		//envio de mais de 8 caracteres
+		frete = calculoFrete.calcularFrete("10", new BigDecimal("11"), new BigDecimal("16"),
+				new BigDecimal("11"), "40010", "123456789");
+		
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.CEPDESTINVALIDO.getValue()));
+		Assert.assertTrue(frete.getValor() == 0);
+		Assert.assertTrue(frete.getTempoEntrega()==0);
+
+		//envio de letra nos 8 caracteres
+		frete = calculoFrete.calcularFrete("10", new BigDecimal("11"), new BigDecimal("16"),
+				new BigDecimal("11"), "40010", "aabbbccc");
+		
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.CEPDESTINVALIDO.getValue()));
+		Assert.assertTrue(frete.getValor() == 0);
+		Assert.assertTrue(frete.getTempoEntrega()==0);
+	}
+	
+	@Test
+	public void larguraMaxIncorreto_testeInvalido(){
+		CalculoFrete calculoFrete = new CalculoFrete();
+		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("106"), new BigDecimal("16"),
+				new BigDecimal("11"), "40010", "14400180");
+		
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.LARGURA_MAX_EXCEDIDA.getValue()));
+		Assert.assertTrue(frete.getValor() == 0);
+		Assert.assertTrue(frete.getTempoEntrega() == 0);
+	}
+	
+	@Test
+	public void larguraMinIncorreto_testeInvalido(){
+		CalculoFrete calculoFrete = new CalculoFrete();
+		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("10"), new BigDecimal("16"),
+				new BigDecimal("11"), "40010", "14400180");
+		
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.LARGURA_MIN_NEXCEDIDA.getValue()));
 		Assert.assertTrue(frete.getValor() == 0);
 		Assert.assertTrue(frete.getTempoEntrega() == 0);
 	}
