@@ -10,8 +10,8 @@ import br.com.comprefacil.stub.StubCorreios;
 
 public class ValidacaoCEP {
 
-	public Endereco retornarEndereco(String CEP) {
-		//TODO fazer as validações
+	public Endereco retornarEndereco(String CEP) throws ClientProtocolException, IOException, JSONException {
+		//TODO fazer as validações, pode validar o tamanho do CEP, entre outras coisas
 		
 		Endereco endereco = new Endereco();
 		//chama o stub
@@ -19,25 +19,14 @@ public class ValidacaoCEP {
 		JSONObject parseEndereco;
 		
 		//TODO validar exceções
-		try {
-			parseEndereco = correios.getEndereco(CEP);
-			endereco.setNomeBairro(parseEndereco.getString("bairro"));
-			endereco.setNomeLocalizacao(parseEndereco.getString("localizacao"));
-			endereco.setNomeLogradouro(parseEndereco.getString("logradouro"));
-			endereco.setNumeroLogradouro(parseEndereco.getInt("numero"));
-			endereco.setSiglaUF(parseEndereco.getString("uf"));
-			endereco.setTipoLogradouro(parseEndereco.getString("tipo"));
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		parseEndereco = correios.getEndereco(CEP);
+		endereco.setNomeBairro(parseEndereco.getString("bairro"));
+		endereco.setNomeLocalizacao(parseEndereco.getString("localizacao"));
+		endereco.setNomeLogradouro(parseEndereco.getString("logradouro"));
+		endereco.setNumeroLogradouro(parseEndereco.getInt("numero"));
+		endereco.setSiglaUF(parseEndereco.getString("uf"));
+		endereco.setTipoLogradouro(parseEndereco.getString("tipo"));
+
 		return endereco;
 	}
 }

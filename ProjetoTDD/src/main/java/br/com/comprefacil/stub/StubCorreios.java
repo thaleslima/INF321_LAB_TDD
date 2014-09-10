@@ -6,15 +6,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Rule;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 public class StubCorreios {
 	
-	@Rule
-    public WireMockRule wireMockRule = new WireMockRule(18089);
- 
     private HttpFetcher instance = new HttpFetcher();
 
 	public JSONObject getEndereco(String CEP) throws ClientProtocolException, IOException, JSONException {
