@@ -29,4 +29,27 @@ public class StubCorreios {
 			 return Request.Get(url).execute().returnContent().asString();
 		 }
 	 }
+	 
+	 public JSONObject getPrecoPrazoResponse(String nCdEmpresa, String sDsSenha, String nCdServico, String sCepOrigem, String sCepDestino, String nVlPeso, int nCdFormato, java.math.BigDecimal nVlComprimento, java.math.BigDecimal nVlAltura, java.math.BigDecimal nVlLargura, java.math.BigDecimal nVlDiametro, String sCdMaoPropria, java.math.BigDecimal nVlValorDeclarado, String sCdAvisoRecebimento) throws ClientProtocolException, IOException, JSONException {
+		 JSONObject parseObject = null;
+		 String response = instance
+				.fetchAsString("http://localhost:18099/getPrecoPrazo?nCdEmpresa="
+						+ nCdEmpresa
+						+ "&sDsSenha="	+ sDsSenha
+						+ "&nCdServico="+ nCdServico
+						+ "&sCepOrigem="+ sCepOrigem
+						+ "&sCepDestino="+ sCepDestino
+						+ "&nVlPeso="+ nVlPeso
+						+ "&nCdFormato="+ nCdFormato
+						+ "&nVlComprimento="+ nVlComprimento
+						+ "&nVlAltura="	+ nVlAltura
+						+ "&nVlLargura="+ nVlLargura
+						+ "&nVlDiametro="+ nVlDiametro
+						+ "&sCdMaoPropria="	+ sCdMaoPropria
+						+ "&nVlValorDeclarado="	+ nVlValorDeclarado
+						+ "&sCdAvisoRecebimento="+ sCdAvisoRecebimento);
+		 parseObject = new JSONObject(response);
+		 return parseObject;
+
+	 }
 }

@@ -5,7 +5,13 @@ import java.math.BigDecimal;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+
 import br.com.comprefacil.frete.CalculoFrete;
+import br.com.comprefacil.frete.CalculoFreteStub;
 import br.com.comprefacil.frete.CodigoRetornoFrete;
 import br.com.comprefacil.frete.Frete;
 
@@ -197,5 +203,54 @@ public class UC01Teste {
 		Assert.assertTrue(frete.getValor() > 0);
 		Assert.assertTrue(frete.getTempoEntrega() > 0);
 		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.SOMA_CORRETA.getValue()));
+	}
+	
+	@Test
+	public void erroCorreiosForaAr_testeValido(){
+		String nCdEmpresa = "";
+		String sDsSenha = "";
+		String nCdServico = "40010";
+		String sCepOrigem = "13081970";
+		String sCepDestino = "14400180";
+		String nVlPeso = "10";
+		int nCdFormato = 1;
+		BigDecimal nVlComprimento = new BigDecimal("90");
+		BigDecimal nVlAltura = new BigDecimal("20");
+		BigDecimal nVlLargura = new BigDecimal("90");
+		BigDecimal nVlDiametro = new BigDecimal("1");
+		String sCdMaoPropria = "N";
+		BigDecimal nVlValorDeclarado = new BigDecimal("0");
+		String sCdAvisoRecebimento = "N"; 
+		
+		
+		stubFor(get(
+				urlEqualTo("/getPrecoPrazo?nCdEmpresa=" + nCdEmpresa
+						+ "&sDsSenha=" + sDsSenha 
+						+ "&nCdServico=" + nCdServico
+						+ "&sCepOrigem=" + sCepOrigem 
+						+ "&sCepDestino=" + sCepDestino 
+						+ "&nVlPeso=" + nVlPeso 
+						+ "&nCdFormato="+ nCdFormato 
+						+ "&nVlComprimento=" + nVlComprimento
+						+ "&nVlAltura=" + nVlAltura 
+						+ "&nVlLargura="+ nVlLargura 
+						+ "&nVlDiametro=" + nVlDiametro
+						+ "&sCdMaoPropria=" + sCdMaoPropria
+						+ "&nVlValorDeclarado=" + nVlValorDeclarado
+						+ "&sCdAvisoRecebimento=" + sCdAvisoRecebimento))
+				.willReturn(
+				aResponse().withStatus(200)
+				.withHeader("Content-Type", "application/json")
+				.withBody("{ \"valor\":\"0\", \"tempoEntrega\":\"0\", \"erroCod\":\"33\","
+						+ "\"erroMsg\":\"Sistema temporariamente fora do ar. Favor tentar mais tarde.\" }")));
+	
+		CalculoFreteStub calcularFrete = new CalculoFreteStub();
+		Frete frete = calcularFrete.calcularFreteStub(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
+	
+		Assert.assertTrue(new Double(0.0).equals(frete.getValor()));
+		Assert.assertTrue(new Double(0.0).equals(frete.getTempoEntrega()));
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.SOMA_CORRETA.getValue()));
+//		Assert.assertEquals("Sistema temporariamente fora do ar. Favor tentar mais tarde.",frete.getErroMsg());
+				
 	}
 }
