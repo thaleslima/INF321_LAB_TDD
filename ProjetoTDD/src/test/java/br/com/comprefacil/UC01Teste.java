@@ -1,21 +1,28 @@
 package br.com.comprefacil;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-
 import br.com.comprefacil.frete.CalculoFrete;
-import br.com.comprefacil.frete.CalculoFreteStub;
 import br.com.comprefacil.frete.CodigoRetornoFrete;
 import br.com.comprefacil.frete.Frete;
 
 public class UC01Teste {
+	
+	@Rule
+	public WireMockRule wireMockRule = new WireMockRule(18099);
 
 	@Test
 	public void valorDofrete_Valido() {
@@ -206,7 +213,7 @@ public class UC01Teste {
 	}
 	
 	@Test
-	public void erroCorreiosForaAr_testeValido(){
+	public void erroCorreiosForaAr_testeValido() throws ClientProtocolException, IOException, JSONException{
 		String nCdEmpresa = "";
 		String sDsSenha = "";
 		String nCdServico = "40010";
@@ -241,16 +248,16 @@ public class UC01Teste {
 				.willReturn(
 				aResponse().withStatus(200)
 				.withHeader("Content-Type", "application/json")
-				.withBody("{ \"valor\":\"0\", \"tempoEntrega\":\"0\", \"erroCod\":\"33\","
+				.withBody("{ \"valor\":\"0\", \"tempoEntrega\":\"0\", \"erroCod\":\"-33\","
 						+ "\"erroMsg\":\"Sistema temporariamente fora do ar. Favor tentar mais tarde.\" }")));
 	
-		CalculoFreteStub calcularFrete = new CalculoFreteStub();
-		Frete frete = calcularFrete.calcularFreteStub(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
+		CalculoFrete calcular = new CalculoFrete();
+		Frete frete = calcular.calcularFrete(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
 	
 		Assert.assertTrue(new Double(0.0).equals(frete.getValor()));
 		Assert.assertTrue(new Double(0.0).equals(frete.getTempoEntrega()));
-		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.SOMA_CORRETA.getValue()));
-//		Assert.assertEquals("Sistema temporariamente fora do ar. Favor tentar mais tarde.",frete.getErroMsg());
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.CORREIOS_FORA_DO_AR.getValue()));
+		Assert.assertEquals("Sistema temporariamente fora do ar. Favor tentar mais tarde.",frete.getErroMsg());
 				
 	}
 }
