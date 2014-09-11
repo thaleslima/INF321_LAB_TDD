@@ -87,10 +87,10 @@ public class CalculoFrete {
 		valor = valor.replaceAll(",", ".");
 		prazo = prazo.replaceAll(",", ".");
 
-		frete.setValor(Double.parseDouble(valor));
-		frete.setTempoEntrega(Double.parseDouble(prazo));
-		frete.setErroCod(Integer.parseInt(erroCod));
-		frete.setErroMsg(erroMsg);
+		frete.setValor(valor == null ? 0.0 : Double.parseDouble(valor));
+		frete.setTempoEntrega(prazo == null ? 0.0 :Double.parseDouble(prazo));
+		frete.setErroCod(erroCod == null ? 0 : Integer.parseInt(erroCod));
+		frete.setErroMsg(erroMsg == null ? "" : erroMsg);
 
 		return frete;
 	}

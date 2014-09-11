@@ -3,7 +3,6 @@ package br.com.comprefacil.stub;
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.fluent.Request;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,16 +22,10 @@ public class StubCorreios {
 		//apenas como stub.
 		return parseObject;
 	}
-	
-	 class HttpFetcher {
-		 public String fetchAsString(String url) throws ClientProtocolException, IOException {
-			 return Request.Get(url).execute().returnContent().asString();
-		 }
-	 }
 	 
-	 public JSONObject getPrecoPrazoResponse(String nCdEmpresa, String sDsSenha, String nCdServico, String sCepOrigem, String sCepDestino, String nVlPeso, int nCdFormato, java.math.BigDecimal nVlComprimento, java.math.BigDecimal nVlAltura, java.math.BigDecimal nVlLargura, java.math.BigDecimal nVlDiametro, String sCdMaoPropria, java.math.BigDecimal nVlValorDeclarado, String sCdAvisoRecebimento) throws ClientProtocolException, IOException, JSONException {
-		 JSONObject parseObject = null;
-		 String response = instance
+	public JSONObject getPrecoPrazoResponse(String nCdEmpresa, String sDsSenha, String nCdServico, String sCepOrigem, String sCepDestino, String nVlPeso, int nCdFormato, java.math.BigDecimal nVlComprimento, java.math.BigDecimal nVlAltura, java.math.BigDecimal nVlLargura, java.math.BigDecimal nVlDiametro, String sCdMaoPropria, java.math.BigDecimal nVlValorDeclarado, String sCdAvisoRecebimento) throws ClientProtocolException, IOException, JSONException {
+		JSONObject parseObject = null;
+		String response = instance
 				.fetchAsString("http://localhost:18099/getPrecoPrazo?nCdEmpresa="
 						+ nCdEmpresa
 						+ "&sDsSenha="	+ sDsSenha
@@ -48,8 +41,8 @@ public class StubCorreios {
 						+ "&sCdMaoPropria="	+ sCdMaoPropria
 						+ "&nVlValorDeclarado="	+ nVlValorDeclarado
 						+ "&sCdAvisoRecebimento="+ sCdAvisoRecebimento);
-		 parseObject = new JSONObject(response);
-		 return parseObject;
+		parseObject = new JSONObject(response);
+		return parseObject;
 
-	 }
+	}
 }

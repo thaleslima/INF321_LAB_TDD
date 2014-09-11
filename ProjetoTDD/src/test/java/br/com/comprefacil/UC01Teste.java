@@ -3,12 +3,14 @@ package br.com.comprefacil;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
+import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -259,5 +261,287 @@ public class UC01Teste {
 		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.CORREIOS_FORA_DO_AR.getValue()));
 		Assert.assertEquals("Sistema temporariamente fora do ar. Favor tentar mais tarde.",frete.getErroMsg());
 				
+	}
+	
+	@Test
+	public void erroCalcularTarifa_testeValido() throws ClientProtocolException, IOException, JSONException{
+		String nCdEmpresa = "";
+		String sDsSenha = "";
+		String nCdServico = "40010";
+		String sCepOrigem = "13081970";
+		String sCepDestino = "14400180";
+		String nVlPeso = "10";
+		int nCdFormato = 1;
+		BigDecimal nVlComprimento = new BigDecimal("90");
+		BigDecimal nVlAltura = new BigDecimal("20");
+		BigDecimal nVlLargura = new BigDecimal("90");
+		BigDecimal nVlDiametro = new BigDecimal("1");
+		String sCdMaoPropria = "N";
+		BigDecimal nVlValorDeclarado = new BigDecimal("0");
+		String sCdAvisoRecebimento = "N"; 
+		
+		
+		stubFor(get(
+				urlEqualTo("/getPrecoPrazo?nCdEmpresa=" + nCdEmpresa
+						+ "&sDsSenha=" + sDsSenha 
+						+ "&nCdServico=" + nCdServico
+						+ "&sCepOrigem=" + sCepOrigem 
+						+ "&sCepDestino=" + sCepDestino 
+						+ "&nVlPeso=" + nVlPeso 
+						+ "&nCdFormato="+ nCdFormato 
+						+ "&nVlComprimento=" + nVlComprimento
+						+ "&nVlAltura=" + nVlAltura 
+						+ "&nVlLargura="+ nVlLargura 
+						+ "&nVlDiametro=" + nVlDiametro
+						+ "&sCdMaoPropria=" + sCdMaoPropria
+						+ "&nVlValorDeclarado=" + nVlValorDeclarado
+						+ "&sCdAvisoRecebimento=" + sCdAvisoRecebimento))
+				.willReturn(
+				aResponse().withStatus(200)
+				.withHeader("Content-Type", "application/json")
+				.withBody("{ \"valor\":\"0\", \"tempoEntrega\":\"0\", \"erroCod\":\"-888\","
+						+ "\"erroMsg\":\"Erro ao calcular a tarifa.\" }")));
+	
+		CalculoFrete calcular = new CalculoFrete();
+		Frete frete = calcular.calcularFrete(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
+	
+		Assert.assertTrue(new Double(0.0).equals(frete.getValor()));
+		Assert.assertTrue(new Double(0.0).equals(frete.getTempoEntrega()));
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.ERRO_CALCULO_TARIFA.getValue()));
+		Assert.assertEquals("Erro ao calcular a tarifa.",frete.getErroMsg());
+				
+	}
+	
+	@Test
+	public void erroSistemaIndisponivel_testeValido() throws ClientProtocolException, IOException, JSONException{
+		String nCdEmpresa = "";
+		String sDsSenha = "";
+		String nCdServico = "40010";
+		String sCepOrigem = "13081970";
+		String sCepDestino = "14400180";
+		String nVlPeso = "10";
+		int nCdFormato = 1;
+		BigDecimal nVlComprimento = new BigDecimal("90");
+		BigDecimal nVlAltura = new BigDecimal("20");
+		BigDecimal nVlLargura = new BigDecimal("90");
+		BigDecimal nVlDiametro = new BigDecimal("1");
+		String sCdMaoPropria = "N";
+		BigDecimal nVlValorDeclarado = new BigDecimal("0");
+		String sCdAvisoRecebimento = "N"; 
+		
+		
+		stubFor(get(
+				urlEqualTo("/getPrecoPrazo?nCdEmpresa=" + nCdEmpresa
+						+ "&sDsSenha=" + sDsSenha 
+						+ "&nCdServico=" + nCdServico
+						+ "&sCepOrigem=" + sCepOrigem 
+						+ "&sCepDestino=" + sCepDestino 
+						+ "&nVlPeso=" + nVlPeso 
+						+ "&nCdFormato="+ nCdFormato 
+						+ "&nVlComprimento=" + nVlComprimento
+						+ "&nVlAltura=" + nVlAltura 
+						+ "&nVlLargura="+ nVlLargura 
+						+ "&nVlDiametro=" + nVlDiametro
+						+ "&sCdMaoPropria=" + sCdMaoPropria
+						+ "&nVlValorDeclarado=" + nVlValorDeclarado
+						+ "&sCdAvisoRecebimento=" + sCdAvisoRecebimento))
+				.willReturn(
+				aResponse().withStatus(200)
+				.withHeader("Content-Type", "application/json")
+				.withBody("{ \"valor\":\"0\", \"tempoEntrega\":\"0\", \"erroCod\":\"7\","
+						+ "\"erroMsg\":\"Servico indisponivel, tente mais tarde\" }")));
+	
+		CalculoFrete calcular = new CalculoFrete();
+		Frete frete = calcular.calcularFrete(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
+	
+		Assert.assertTrue(new Double(0.0).equals(frete.getValor()));
+		Assert.assertTrue(new Double(0.0).equals(frete.getTempoEntrega()));
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.CORREIOS_SERVICO_INDISPONIVEL.getValue()));
+		Assert.assertEquals("Servico indisponivel, tente mais tarde",frete.getErroMsg());
+				
+	}
+	
+	@Test
+	public void erroOutrosErros_testeValido() throws ClientProtocolException, IOException, JSONException{
+		String nCdEmpresa = "";
+		String sDsSenha = "";
+		String nCdServico = "40010";
+		String sCepOrigem = "13081970";
+		String sCepDestino = "14400180";
+		String nVlPeso = "10";
+		int nCdFormato = 1;
+		BigDecimal nVlComprimento = new BigDecimal("90");
+		BigDecimal nVlAltura = new BigDecimal("20");
+		BigDecimal nVlLargura = new BigDecimal("90");
+		BigDecimal nVlDiametro = new BigDecimal("1");
+		String sCdMaoPropria = "N";
+		BigDecimal nVlValorDeclarado = new BigDecimal("0");
+		String sCdAvisoRecebimento = "N"; 
+		
+		
+		stubFor(get(
+				urlEqualTo("/getPrecoPrazo?nCdEmpresa=" + nCdEmpresa
+						+ "&sDsSenha=" + sDsSenha 
+						+ "&nCdServico=" + nCdServico
+						+ "&sCepOrigem=" + sCepOrigem 
+						+ "&sCepDestino=" + sCepDestino 
+						+ "&nVlPeso=" + nVlPeso 
+						+ "&nCdFormato="+ nCdFormato 
+						+ "&nVlComprimento=" + nVlComprimento
+						+ "&nVlAltura=" + nVlAltura 
+						+ "&nVlLargura="+ nVlLargura 
+						+ "&nVlDiametro=" + nVlDiametro
+						+ "&sCdMaoPropria=" + sCdMaoPropria
+						+ "&nVlValorDeclarado=" + nVlValorDeclarado
+						+ "&sCdAvisoRecebimento=" + sCdAvisoRecebimento))
+				.willReturn(
+				aResponse().withStatus(200)
+				.withHeader("Content-Type", "application/json")
+				.withBody("{ \"valor\":\"0\", \"tempoEntrega\":\"0\", \"erroCod\":\"99\","
+						+ "\"erroMsg\":\"Outros erros diversos do .Net\" }")));
+	
+		CalculoFrete calcular = new CalculoFrete();
+		Frete frete = calcular.calcularFrete(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
+	
+		Assert.assertTrue(new Double(0.0).equals(frete.getValor()));
+		Assert.assertTrue(new Double(0.0).equals(frete.getTempoEntrega()));
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.CORREIOS_OUTROS_ERROS.getValue()));
+		Assert.assertEquals("Outros erros diversos do .Net",frete.getErroMsg());
+				
+	}
+	
+	@Test (expected=ClientProtocolException.class)
+	public void erroCloseConnectio_testeInvalido() throws ClientProtocolException, IOException, JSONException{
+		String nCdEmpresa = "";
+		String sDsSenha = "";
+		String nCdServico = "40010";
+		String sCepOrigem = "13081970";
+		String sCepDestino = "14400180";
+		String nVlPeso = "10";
+		int nCdFormato = 1;
+		BigDecimal nVlComprimento = new BigDecimal("90");
+		BigDecimal nVlAltura = new BigDecimal("20");
+		BigDecimal nVlLargura = new BigDecimal("90");
+		BigDecimal nVlDiametro = new BigDecimal("1");
+		String sCdMaoPropria = "N";
+		BigDecimal nVlValorDeclarado = new BigDecimal("0");
+		String sCdAvisoRecebimento = "N"; 
+		
+		
+		stubFor(get(
+				urlEqualTo("/getPrecoPrazo?nCdEmpresa=" + nCdEmpresa
+						+ "&sDsSenha=" + sDsSenha 
+						+ "&nCdServico=" + nCdServico
+						+ "&sCepOrigem=" + sCepOrigem 
+						+ "&sCepDestino=" + sCepDestino 
+						+ "&nVlPeso=" + nVlPeso 
+						+ "&nCdFormato="+ nCdFormato 
+						+ "&nVlComprimento=" + nVlComprimento
+						+ "&nVlAltura=" + nVlAltura 
+						+ "&nVlLargura="+ nVlLargura 
+						+ "&nVlDiametro=" + nVlDiametro
+						+ "&sCdMaoPropria=" + sCdMaoPropria
+						+ "&nVlValorDeclarado=" + nVlValorDeclarado
+						+ "&sCdAvisoRecebimento=" + sCdAvisoRecebimento))
+				.willReturn(
+				aResponse().withStatus(200)
+				.withHeader("Content-Type", "application/json")
+				.withBody("{ \"valor\":\"0\", \"tempoEntrega\":\"0\", \"erroCod\":\"99\","
+						+ "\"erroMsg\":\"Outros erros diversos do .Net\" }")
+						.withFault(Fault.RANDOM_DATA_THEN_CLOSE)));
+	
+		CalculoFrete calcular = new CalculoFrete();
+		calcular.calcularFrete(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
+	}
+	
+	@Test (expected=NoHttpResponseException.class)
+	public void erroEmptyResponse_testeInvalido() throws ClientProtocolException, IOException, JSONException{
+		String nCdEmpresa = "";
+		String sDsSenha = "";
+		String nCdServico = "40010";
+		String sCepOrigem = "13081970";
+		String sCepDestino = "14400180";
+		String nVlPeso = "10";
+		int nCdFormato = 1;
+		BigDecimal nVlComprimento = new BigDecimal("90");
+		BigDecimal nVlAltura = new BigDecimal("20");
+		BigDecimal nVlLargura = new BigDecimal("90");
+		BigDecimal nVlDiametro = new BigDecimal("1");
+		String sCdMaoPropria = "N";
+		BigDecimal nVlValorDeclarado = new BigDecimal("0");
+		String sCdAvisoRecebimento = "N"; 
+		
+		
+		stubFor(get(
+				urlEqualTo("/getPrecoPrazo?nCdEmpresa=" + nCdEmpresa
+						+ "&sDsSenha=" + sDsSenha 
+						+ "&nCdServico=" + nCdServico
+						+ "&sCepOrigem=" + sCepOrigem 
+						+ "&sCepDestino=" + sCepDestino 
+						+ "&nVlPeso=" + nVlPeso 
+						+ "&nCdFormato="+ nCdFormato 
+						+ "&nVlComprimento=" + nVlComprimento
+						+ "&nVlAltura=" + nVlAltura 
+						+ "&nVlLargura="+ nVlLargura 
+						+ "&nVlDiametro=" + nVlDiametro
+						+ "&sCdMaoPropria=" + sCdMaoPropria
+						+ "&nVlValorDeclarado=" + nVlValorDeclarado
+						+ "&sCdAvisoRecebimento=" + sCdAvisoRecebimento))
+				.willReturn(
+				aResponse().withStatus(200)
+				.withHeader("Content-Type", "application/json")
+				.withBody("{ \"valor\":\"0\", \"tempoEntrega\":\"0\", \"erroCod\":\"99\","
+						+ "\"erroMsg\":\"Outros erros diversos do .Net\" }")
+						.withFault(Fault.EMPTY_RESPONSE)));
+	
+		CalculoFrete calcular = new CalculoFrete();
+		calcular.calcularFrete(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
+	}
+	
+	public void delay_testeValido() throws ClientProtocolException, IOException, JSONException{
+		String nCdEmpresa = "";
+		String sDsSenha = "";
+		String nCdServico = "40010";
+		String sCepOrigem = "13081970";
+		String sCepDestino = "14400180";
+		String nVlPeso = "10";
+		int nCdFormato = 1;
+		BigDecimal nVlComprimento = new BigDecimal("90");
+		BigDecimal nVlAltura = new BigDecimal("20");
+		BigDecimal nVlLargura = new BigDecimal("90");
+		BigDecimal nVlDiametro = new BigDecimal("1");
+		String sCdMaoPropria = "N";
+		BigDecimal nVlValorDeclarado = new BigDecimal("0");
+		String sCdAvisoRecebimento = "N"; 
+		
+		stubFor(get(
+				urlEqualTo("/getPrecoPrazo?nCdEmpresa=" + nCdEmpresa
+						+ "&sDsSenha=" + sDsSenha 
+						+ "&nCdServico=" + nCdServico
+						+ "&sCepOrigem=" + sCepOrigem 
+						+ "&sCepDestino=" + sCepDestino 
+						+ "&nVlPeso=" + nVlPeso 
+						+ "&nCdFormato="+ nCdFormato 
+						+ "&nVlComprimento=" + nVlComprimento
+						+ "&nVlAltura=" + nVlAltura 
+						+ "&nVlLargura="+ nVlLargura 
+						+ "&nVlDiametro=" + nVlDiametro
+						+ "&sCdMaoPropria=" + sCdMaoPropria
+						+ "&nVlValorDeclarado=" + nVlValorDeclarado
+						+ "&sCdAvisoRecebimento=" + sCdAvisoRecebimento))
+				.willReturn(
+				aResponse().withStatus(200)
+				.withHeader("Content-Type", "application/json")
+				.withBody("{ \"valor\":\"0\", \"tempoEntrega\":\"0\", \"erroCod\":\"99\","
+						+ "\"erroMsg\":\"Outros erros diversos do .Net\" }")
+						.withFixedDelay(300)));
+	
+		CalculoFrete calcular = new CalculoFrete();
+		Frete frete = calcular.calcularFrete(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
+	
+		Assert.assertTrue(new Double(0.0).equals(frete.getValor()));
+		Assert.assertTrue(new Double(0.0).equals(frete.getTempoEntrega()));
+		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.CORREIOS_OUTROS_ERROS.getValue()));
+		Assert.assertEquals("Outros erros diversos do .Net",frete.getErroMsg());
 	}
 }
