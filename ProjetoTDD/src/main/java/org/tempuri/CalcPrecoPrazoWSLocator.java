@@ -13,14 +13,14 @@ public class CalcPrecoPrazoWSLocator extends org.apache.axis.client.Service impl
     }
 
 
-    public CalcPrecoPrazoWSLocator(org.apache.axis.EngineConfiguration config) {
+  /*  public CalcPrecoPrazoWSLocator(org.apache.axis.EngineConfiguration config) {
         super(config);
     }
 
     public CalcPrecoPrazoWSLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
         super(wsdlLoc, sName);
     }
-
+*/
     // Use to get a proxy class for CalcPrecoPrazoWSSoap
     private java.lang.String CalcPrecoPrazoWSSoap_address = "http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx";
 
@@ -35,10 +35,10 @@ public class CalcPrecoPrazoWSLocator extends org.apache.axis.client.Service impl
         return CalcPrecoPrazoWSSoapWSDDServiceName;
     }
 
-    public void setCalcPrecoPrazoWSSoapWSDDServiceName(java.lang.String name) {
+/*    public void setCalcPrecoPrazoWSSoapWSDDServiceName(java.lang.String name) {
         CalcPrecoPrazoWSSoapWSDDServiceName = name;
     }
-
+*/
     public org.tempuri.CalcPrecoPrazoWSSoap getCalcPrecoPrazoWSSoap() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
@@ -70,7 +70,7 @@ public class CalcPrecoPrazoWSLocator extends org.apache.axis.client.Service impl
      * If this service has no port for the given interface,
      * then ServiceException is thrown.
      */
-    public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+ /*   public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
             if (org.tempuri.CalcPrecoPrazoWSSoap.class.isAssignableFrom(serviceEndpointInterface)) {
                 org.tempuri.CalcPrecoPrazoWSSoapStub _stub = new org.tempuri.CalcPrecoPrazoWSSoapStub(new java.net.URL(CalcPrecoPrazoWSSoap_address), this);
@@ -89,7 +89,7 @@ public class CalcPrecoPrazoWSLocator extends org.apache.axis.client.Service impl
      * If this service has no port for the given interface,
      * then ServiceException is thrown.
      */
-    public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+/*    public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         if (portName == null) {
             return getPort(serviceEndpointInterface);
         }
@@ -110,18 +110,18 @@ public class CalcPrecoPrazoWSLocator extends org.apache.axis.client.Service impl
 
     private java.util.HashSet ports = null;
 
-    public java.util.Iterator getPorts() {
+/*    public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
             ports.add(new javax.xml.namespace.QName("http://tempuri.org/", "CalcPrecoPrazoWSSoap"));
         }
         return ports.iterator();
     }
-
+*/
     /**
     * Set the endpoint address for the specified port name.
     */
-    public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
+/*    public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
         
 if ("CalcPrecoPrazoWSSoap".equals(portName)) {
             setCalcPrecoPrazoWSSoapEndpointAddress(address);
@@ -131,12 +131,12 @@ if ("CalcPrecoPrazoWSSoap".equals(portName)) {
             throw new javax.xml.rpc.ServiceException(" Cannot set Endpoint Address for Unknown Port" + portName);
         }
     }
-
+*/
     /**
     * Set the endpoint address for the specified port name.
     */
-    public void setEndpointAddress(javax.xml.namespace.QName portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
-        setEndpointAddress(portName.getLocalPart(), address);
-    }
+//    public void setEndpointAddress(javax.xml.namespace.QName portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
+//        setEndpointAddress(portName.getLocalPart(), address);
+//    }
 
 }

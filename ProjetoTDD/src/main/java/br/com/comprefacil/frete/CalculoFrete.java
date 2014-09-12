@@ -18,6 +18,8 @@ import br.com.comprefacil.stub.StubCorreios;
 
 public class CalculoFrete {
 
+	private String URLCorreio = "http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx";
+	
 	public Frete calcularFrete(String peso, BigDecimal largura,
 			BigDecimal comprimento, BigDecimal altura, String tipo, String cep) {
 		Frete frete = new Frete();
@@ -42,8 +44,9 @@ public class CalculoFrete {
 		BigDecimal valorDeclarado = new BigDecimal(0);
 
 		try {
-			CorreioService = new CalcPrecoPrazoWSLocator()
-					.getCalcPrecoPrazoWSSoap();
+			CalcPrecoPrazoWSLocator CalcPrecoPrazo = new CalcPrecoPrazoWSLocator();
+			CalcPrecoPrazo.setCalcPrecoPrazoWSSoapEndpointAddress(URLCorreio);
+			CorreioService = CalcPrecoPrazo.getCalcPrecoPrazoWSSoap();
 			try {
 				resultado = CorreioService.calcPrecoPrazo("", "", tipo,
 						"13081970", cep, peso, 1, comprimento, altura, largura,
@@ -109,5 +112,10 @@ public class CalculoFrete {
 		frete.setErroCod(parseCorreio.getInt("erroCod"));
 		
 		return frete;
+	}
+	
+	public void setURLCorreios(String URL){
+		String temp = new CalcPrecoPrazoWSLocator().getCalcPrecoPrazoWSSoapAddress();
+		URLCorreio = URL;
 	}
 }

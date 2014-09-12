@@ -13,11 +13,10 @@ public class CResultado  implements java.io.Serializable {
     public CResultado() {
     }
 
-    public CResultado(
-           org.tempuri.CServico[] servicos) {
+/*    public CResultado(org.tempuri.CServico[] servicos) {
            this.servicos = servicos;
     }
-
+*/
 
     /**
      * Gets the servicos value for this CResultado.
@@ -39,7 +38,7 @@ public class CResultado  implements java.io.Serializable {
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+/*    public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof CResultado)) return false;
         CResultado other = (CResultado) obj;
         if (obj == null) return false;
@@ -56,7 +55,7 @@ public class CResultado  implements java.io.Serializable {
         __equalsCalc = null;
         return _equals;
     }
-
+*/
     private boolean __hashCodeCalc = false;
     public synchronized int hashCode() {
         if (__hashCodeCalc) {
@@ -105,7 +104,7 @@ public class CResultado  implements java.io.Serializable {
     /**
      * Get Custom Serializer
      */
-    public static org.apache.axis.encoding.Serializer getSerializer(
+/*    public static org.apache.axis.encoding.Serializer getSerializer(
            java.lang.String mechType, 
            java.lang.Class _javaType,  
            javax.xml.namespace.QName _xmlType) {
@@ -113,7 +112,7 @@ public class CResultado  implements java.io.Serializable {
           new  org.apache.axis.encoding.ser.BeanSerializer(
             _javaType, _xmlType, typeDesc);
     }
-
+*/
     /**
      * Get Custom Deserializer
      */

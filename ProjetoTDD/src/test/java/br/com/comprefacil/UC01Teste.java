@@ -214,6 +214,15 @@ public class UC01Teste {
 		Assert.assertTrue(frete.getErroCod().equals(CodigoRetornoFrete.SOMA_CORRETA.getValue()));
 	}
 	
+	@Test //verificar se a URL dos correios está correta
+	public void URLCorreios_incorreta() {
+		CalculoFrete calculoFrete = new CalculoFrete();
+		calculoFrete.setURLCorreios("http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx");
+		
+		Frete frete = calculoFrete.calcularFrete("10", new BigDecimal("90"), new BigDecimal("90"),
+				new BigDecimal("20"), "40010", "14400180");
+	}
+	
 	@Test
 	public void erroCorreiosForaAr_testeValido() throws ClientProtocolException, IOException, JSONException{
 		String nCdEmpresa = "";

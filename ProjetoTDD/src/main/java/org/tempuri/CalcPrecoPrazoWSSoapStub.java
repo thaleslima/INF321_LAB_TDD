@@ -759,6 +759,7 @@ public class CalcPrecoPrazoWSSoapStub extends org.apache.axis.client.Stub implem
   } catch (org.apache.axis.AxisFault axisFaultException) {
   throw axisFaultException;
 }
+
     }
 
 }
