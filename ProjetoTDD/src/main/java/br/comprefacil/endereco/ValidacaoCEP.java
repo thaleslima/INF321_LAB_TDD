@@ -19,6 +19,26 @@ public class ValidacaoCEP {
 		JSONObject parseEndereco;
 		
 		//TODO validar exceções
+		   //antes de chamar o STUB vamos validar a string CEP, ela deve estar no formato 11111-111
+	    try{
+	    	if(CEP.length() != 9){
+	    		throw new Exception("CEP com tamanho invalido"); //a ideia aqui é retorna um endereço nulo, mas isso pode ser considerado um erro?
+		        //como o teste ira verificar se está certo
+		    } 
+			else {
+		      //verificar se CEP tem apenas numeros passados
+		      CEP.replace("-","");
+		    
+		      if (CEP.matches("^[ a-zA-Z á]*$")){
+		    	  throw new Exception("CEP não pode conter caracteres");
+		      }
+	
+		   }
+	   } catch(Exception ex){
+		   System.out.println(ex.toString());
+	   }
+		
+		
 		parseEndereco = correios.getEndereco(CEP);
 		endereco.setNomeBairro(parseEndereco.getString("bairro"));
 		endereco.setNomeLocalizacao(parseEndereco.getString("localizacao"));

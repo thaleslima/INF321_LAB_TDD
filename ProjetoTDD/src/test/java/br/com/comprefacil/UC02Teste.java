@@ -75,4 +75,29 @@ public class UC02Teste {
 		validacao.retornarEndereco("13171-130");
 	}
 	
+	@Test
+	public void endereco_CepInvalido_QtdeCaractErrado() throws ClientProtocolException, IOException, JSONException {
+		String CEP = "13171-13";
+		stubFor(get(urlEqualTo("/buscaEndereco?cep=" + CEP)).willReturn(
+				aResponse().withStatus(200)
+						.withHeader("Content-Type", "application/json")
+						.withBody("{ \"tipo\":\"Rua\", \"logradouro\":\"Bahia\", \"numero\":\"452\","
+								+ "\"bairro\":\"Nova Veneza\",\"localizacao\":\"Sumare\",\"uf\":\"SP\" }")));
+		
+		ValidacaoCEP validacao = new ValidacaoCEP();
+		Endereco endereco = validacao.retornarEndereco("13171-13");
+	}
+	
+	@Test
+	public void endereco_CepInvalido_letrasnoCEP() throws ClientProtocolException, IOException, JSONException {
+		String CEP = "13171-13a";
+		stubFor(get(urlEqualTo("/buscaEndereco?cep=" + CEP)).willReturn(
+				aResponse().withStatus(200)
+						.withHeader("Content-Type", "application/json")
+						.withBody("{ \"tipo\":\"Rua\", \"logradouro\":\"Bahia\", \"numero\":\"452\","
+								+ "\"bairro\":\"Nova Veneza\",\"localizacao\":\"Sumare\",\"uf\":\"SP\" }")));
+		
+		ValidacaoCEP validacao = new ValidacaoCEP();
+		Endereco endereco = validacao.retornarEndereco("13171-13a");
+	}
 }
